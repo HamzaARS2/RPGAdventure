@@ -4,8 +4,6 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-
         Room entrance = new Room("Entrance", "The grand entrance of the dungeon.");
         Room armory = new Room("Armory", "Old rusty weapons are scattered around");
         Room dungeon = new Room("Dungeon", "It's dark. You feel a chill run down your spine.");
@@ -26,31 +24,25 @@ public class Main {
         System.out.println("Welcome to RPG Adventure!");
         player.getCurrentRoom().describeRoom();
 
-        while (!player.isDead()) {
-            System.out.print("> ");
-            String input = scanner.nextLine().trim().toLowerCase();
-            if (input.startsWith("go "))
-                handleMovement(input, player);
-            else if (input.startsWith("pickup")) {
-                for (Item item: player.getCurrentRoom().getItems())
-                    player.pickUpItem(item);
-                player.getCurrentRoom().getItems().clear();
-            } else if (input.startsWith("inventory"))
-                player.showInventory();
-            else if (input.startsWith("use ")) {
-                String itemName = input.substring(4);
-                player.useItem(itemName);
-            } else if (input.startsWith("attack"))
-                attackFirstMonster(player);
-            else if (input.equals("exit")) {
-                System.out.println("Thanks for playing!");
-                break;
-            } else
-                System.out.println("Unknown command.");
-        }
-        if (player.isDead())
-            System.out.println("Game Over!");
-        scanner.close();
+        System.out.println("Initial attack power: " + player.getAttackPower());
+
+        Weapon sword = new Weapon("Iron Sword", "A sharp iron sword", 15, false);
+        Weapon axe = new Weapon("Battle Axe", "Heavy two-handed axe", 25, true);
+
+        // Pick up and use the sword
+        player.pickUpItem(sword);
+        player.useItem("Iron Sword");
+        System.out.println("Attack power after equipping sword: " + player.getAttackPower());
+
+        // Pick up and use the axe
+        player.pickUpItem(axe);
+        player.useItem("Battle Axe");
+        System.out.println("Attack power after equipping axe: " + player.getAttackPower());
+
+        // Create a monster and attack
+        Monster goblin = new Monster("Goblin", 30, 5);
+        player.attack(goblin);
+
     }
 
     private static void handleMovement(String input, Player player) {

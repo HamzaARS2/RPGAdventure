@@ -7,6 +7,7 @@ public class Player {
     private String name;
     private int health;
     private int maxHealth;
+    private Weapon equippedWeapon;
     private List<Item> inventory;
     private Room currentRoom;
     private int attackPower;
@@ -44,8 +45,20 @@ public class Player {
 
     public void attack(Monster monster) {
         if (!isAlive) return;
-        System.out.println(name + " attacks " + monster.getName() + " for " + attackPower + " damage.");
+        System.out.println(name + " attacks " + monster.getName() + " with " +
+                ((equippedWeapon != null ? equippedWeapon.getName() : "bare hands") +
+                        " for " + attackPower + " damage."));
         monster.takeDamage(attackPower);
+    }
+
+    public void equipWeapon(Weapon weapon) {
+        if (equippedWeapon != null) {
+            System.out.println("Unequipped: " + equippedWeapon.getName());
+            attackPower -= equippedWeapon.getDamageBoost();
+        }
+        equippedWeapon = weapon;
+        attackPower += weapon.getDamageBoost();
+        System.out.println("Equipped: " + weapon.getName() + " (+" + weapon.getDamageBoost() + " attack power)");
     }
 
     public void takeDamage(int amount) {

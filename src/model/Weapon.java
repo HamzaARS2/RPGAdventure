@@ -13,8 +13,7 @@ public class Weapon extends Item {
 
     @Override
     public void use(Player player) {
-        System.out.println(player.getName() + " equips " + getName() + " (+" + damageBoost + " attack power)");
-        player.increaseAttackPower(damageBoost);
+        player.equipWeapon(this);
     }
 
     public int getDamageBoost() { return damageBoost; }
